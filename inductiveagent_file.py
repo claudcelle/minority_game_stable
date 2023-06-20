@@ -33,6 +33,8 @@ class InductiveAgent(Agent):
             return self.select_random_strategy()
         elif strategy_selection == 'highest_score':
             return self.select_highest_score_strategy()
+        elif strategy_selection == 'thermal_score':
+            return self.select_thermal_score_strategy()
         else:
             raise ValueError("Tipo di selezione strategia non valido")
         
@@ -46,6 +48,14 @@ class InductiveAgent(Agent):
         max_score_indices = np.where(self.scores == max_score)[0]
         selected_strategy_index = random.choice(max_score_indices)
         return self.strategies[selected_strategy_index]
+
+    def select_thermal_score_strategy(self):
+        # Selezione della strategia con un vettore di probabilità
+        expScore = [np.exp(s*self.model.temperature) for s in self.scores]
+        norm = sum(expScore)
+        prob = [x/norm for x in expScore]
+        return  random.choice(self.strategies, p=prob)
+
 
     def take_action(self,selected_strategy,last_information):
         

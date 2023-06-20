@@ -13,12 +13,13 @@ from market_file import *
 
 
 class MinorityGame(Model):
-    def __init__(self, memory, num_agents, num_strategies, strategy_selection, history_initialization,communication=None):
+    def __init__(self, memory, num_agents, num_strategies, strategy_selection, history_initialization, temperature = 1,communication=None):
         self.memory = memory
         self.num_agents = num_agents
         self.num_strategies = num_strategies
         self.strategy_selection = strategy_selection
         self.history_initialization = history_initialization 
+        self.temperature = temperature
         
         self.schedule = time.StagedActivation(self,['step_1','step_2','step_3','step_4'])
 
@@ -48,7 +49,7 @@ class MinorityGame(Model):
         
 
         
-        if strategy_selection not in ['random','highest_score']:
+        if strategy_selection not in ['random','highest_score','thermal_score']:
     
             raise ValueError("Tipo di selezione strategia non valido")
         
